@@ -14,6 +14,15 @@ event.preventDefault();
   var taskNameInput = document.querySelector("input[name='task-name']").value;
   var taskTypeInput = document.querySelector("select[name='task-type']").value;
 
+  // check if input values are empty strings
+  if (!taskNameInput || !taskTypeInput) {
+    alert("You need to fill out the task form");
+    return false;
+  }
+
+  // form resets to default values
+  formEl.reset();
+
   // packaged up as an object
   var taskDataObj = {
     name: taskNameInput,
@@ -41,6 +50,8 @@ var createTaskEl = function(taskDataObj) {
 
   // add entire list item to list
   tasksToDoEl.appendChild(listItemEl);
-}
+};
+
+
 // Call back function for taskFormHandler() function , and makes form submit button work work!
 formEl.addEventListener("submit", taskFormHandler);
