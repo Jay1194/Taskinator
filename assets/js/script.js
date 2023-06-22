@@ -1,16 +1,19 @@
 
-// DOM referencing
+// counter for unique task ids (global scope)
+var taskIdCounter = 0;
+
 // reference to <form> by id
 var formEl = document.querySelector('#task-form');
 
 // reference to <ul> by id
 var tasksToDoEl = document.querySelector("#tasks-to-do");
 
+
 // anomonous function passed parameter using event object
 var taskFormHandler =  function(event) {
 
-//stops submit button from refreshing page    
-event.preventDefault();
+  //stops submit button from refreshing page    
+  event.preventDefault();
   var taskNameInput = document.querySelector("input[name='task-name']").value;
   var taskTypeInput = document.querySelector("select[name='task-type']").value;
 
@@ -34,12 +37,17 @@ event.preventDefault();
   
 };
 
+
 // using an object as a argument
 var createTaskEl = function(taskDataObj) {
-// create list item
+
+  // create list item
   var listItemEl = document.createElement("li");
   listItemEl.className = "task-item";
 
+  // add task id as a custom attribute
+  listItemEl.setAttribute("data-task-id", taskIdCounter);
+ 
   // create div to hold task info and add to list item
   var taskInfoEl = document.createElement("div");
   taskInfoEl.className = "task-info";
@@ -48,10 +56,62 @@ var createTaskEl = function(taskDataObj) {
   taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
   listItemEl.appendChild(taskInfoEl);
 
-  // add entire list item to list
+  // create task actions (buttons and select) for task
+  var taskActionsEl = createTaskActions(taskIdCounter);
+  listItemEl.appendChild(taskActionsEl);
   tasksToDoEl.appendChild(listItemEl);
+
+  // increase task counter for next unique id
+  taskIdCounter++;
+};
+
+
+// Using param to pass different ids in function
+var createTaskActions = function(taskId) {
+
+    // creates div element
+    var actionContainerEl = document.createElement("div");
+    actionContainerEl.className = "task-actions";
+
+    // create edit button
+    var editButtonEl = document.createElement("button");
+    editButtonEl.textContent = "Edit";
+    editButtonEl.className = "btn edit-btn";
+    editButtonEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(editButtonEl);
+
+    // create delete button
+    var deleteButtonEl = document.createElement("button");
+    deleteButtonEl.textContent = "Delete";
+    deleteButtonEl.className = "btn delete-btn";
+    deleteButtonEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(deleteButtonEl);
+
+    var statusSelectEl = document.createElement("select");
+    statusSelectEl.className = "select-status";
+    statusSelectEl.setAttribute("name", "status-change");
+    statusSelectEl.setAttribute("data-task-id", taskId);
+
+    actionContainerEl.appendChild(statusSelectEl);
+
+    var statusChoices = ["To Do", "In Progress", "Completed"];
+
+for (var i = 0; i < statusChoices.length; i++){
+
+    //create option element
+    var statusOptionEl = document.createElement("option");
+    statusOptionEl.textContent = statusChoices[i];
+    statusOptionEl.setAttribute("value", statusChoices[i]);
+
+    //append to select
+    statusSelectEl.appendChild(statusOptionEl);
+}
+
+    return actionContainerEl;
 };
 
 
 // Call back function for taskFormHandler() function , and makes form submit button work work!
-formEl.addEventListener("submit", taskFormHandler);
+formEl.addEventListener("submit", taskFormHandler);  
