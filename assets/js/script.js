@@ -89,7 +89,7 @@ var taskFormHandler =  function(event) {
 };
 };
 
-// using an object as a argument
+// create tasks function / using an object as a argument
 var createTaskEl = function(taskDataObj) {
 
   // create list item
@@ -119,8 +119,7 @@ var createTaskEl = function(taskDataObj) {
   listItemEl.appendChild(taskActionsEl);
   tasksToDoEl.appendChild(listItemEl);
 
-  console.log(taskDataObj);
-  console.log(taskDataObj.status);
+  
   // increase task counter for next unique id
   taskIdCounter++;
 };
@@ -263,7 +262,7 @@ else if (statusValue === "completed") {
     tasksCompletedEl.appendChild(taskSelected);
 }
 
-// update tsasks in tasks array
+// update tasks in tasks array
 for(var i = 0; i < tasks.length; i++) {
 
     if (tasks[i].id === parseInt(taskId)) {
@@ -273,10 +272,10 @@ for(var i = 0; i < tasks.length; i++) {
 
 //local storage function to save data
 saveTasks();
-
 };
 
-// local storage function - for everytine data changes
+
+// save data tolocal storage function - for everytime data changes
 var saveTasks = function() {
 
     // converts all data to string so local storage can read it
@@ -284,9 +283,34 @@ var saveTasks = function() {
 
 };
 
+
+// retrieve saved data from  local storage function
+var loadTasks = function() {
+
+  var savedTasks = localStorage.getItem("tasks");
+  // if there are no tasks, set tasks to an empty array and return out of the function
+  if (!savedTasks) {
+    return false;
+  }
+  console.log("Saved tasks found!");
+  // else, load up saved tasks
+
+  // parse into array of objects
+  savedTasks = JSON.parse(savedTasks);
+
+  // loop through savedTasks array
+  for (var i = 0; i < savedTasks.length; i++) {
+    // pass each task object into the `createTaskEl()` function
+    createTaskEl(savedTasks[i]);
+  }
+};
+  
+
 // Events
 formEl.addEventListener("submit", taskFormHandler);  
 
 pageContentEl.addEventListener("click", taskButtonHandler);
 
-pageContentEl.addEventListener("change", taskStatusChangeHandler);
+pageContentEl.addEventListener("change", taskStatusChangeHandler); 
+
+loadTasks();
