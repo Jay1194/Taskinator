@@ -29,6 +29,9 @@ if (tasks[i].id === parseInt(taskId)) {
 }
 }
 
+//local storage function to save data
+saveTasks();
+
 alert("Task Updated!");
 
   formEl.removeAttribute("data-task-id");
@@ -108,6 +111,9 @@ var createTaskEl = function(taskDataObj) {
   taskDataObj.id = taskIdCounter;
   tasks.push(taskDataObj);
 
+  //local storage function to save data
+  saveTasks();
+
   // create task actions (buttons and select) for task
   var taskActionsEl = createTaskActions(taskIdCounter);
   listItemEl.appendChild(taskActionsEl);
@@ -166,12 +172,6 @@ for (var i = 0; i < statusChoices.length; i++){
     return actionContainerEl;
    
 };
- 
-
-// Call back function for taskFormHandler() function , and makes form submit button work work!
-formEl.addEventListener("submit", taskFormHandler);  
-
-
 
 var taskButtonHandler = function(event) {
 
@@ -190,7 +190,7 @@ var taskButtonHandler = function(event) {
   }
 };
     
-
+// edit tasks function
 var editTask = function(taskId) {
     
   // get task list item element
@@ -198,11 +198,9 @@ var editTask = function(taskId) {
 
   // get content from task name and type
   var taskName = taskSelected.querySelector("h3.task-name").textContent;
-  console.log(taskName);
 
   var taskType = taskSelected.querySelector("span.task-type").textContent;
-  console.log(taskType);
-
+  
   // get content from task name and type
 
   document.querySelector("input[name='task-name']").value = taskName;
@@ -215,6 +213,7 @@ var editTask = function(taskId) {
 };
 
 
+// delete tasks function
 var deleteTask = function(taskId) {
 
    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
@@ -235,6 +234,9 @@ var deleteTask = function(taskId) {
    // reassign tasks array to be same as updatedTaskArr
    tasks = updatedTaskArr;
    
+  //local storage function to save data
+  saveTasks();
+
 };
 
 var taskStatusChangeHandler = function (event) {
@@ -268,8 +270,22 @@ for(var i = 0; i < tasks.length; i++) {
         tasks[i].status = statusValue;
     }
 }
-console.log(tasks);
+
+//local storage function to save data
+saveTasks();
+
 };
+
+// local storage function - for everytine data changes
+var saveTasks = function() {
+
+    // converts all data to string so local storage can read it
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+
+};
+
+// Events
+formEl.addEventListener("submit", taskFormHandler);  
 
 pageContentEl.addEventListener("click", taskButtonHandler);
 
