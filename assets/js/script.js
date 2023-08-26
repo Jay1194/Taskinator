@@ -8,9 +8,8 @@ var tasksCompletedEl = document.querySelector("#tasks-completed");
 
 var tasks = [];
 
-
 var completeEditTask = function(taskName, taskType, taskId) {
-    
+
 // find the matching task list item
 var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
 
@@ -38,7 +37,6 @@ alert("Task Updated!");
 
   document.querySelector("#save-task").textContent = "Add Task";
 };
-
 
 // counter for unique task ids (global scope)
 var taskIdCounter = 0;
@@ -85,8 +83,7 @@ var taskFormHandler =  function(event) {
 
   // send as a agument to createTaskEl
   createTaskEl(taskDataObj);
-  
-};
+}
 };
 
 // create tasks function / using an object as a argument
@@ -274,7 +271,6 @@ for(var i = 0; i < tasks.length; i++) {
 saveTasks();
 };
 
-
 // save data tolocal storage function - for everytime data changes
 var saveTasks = function() {
 
@@ -282,7 +278,6 @@ var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 
 };
-
 
 // retrieve saved data from  local storage function
 var loadTasks = function() {
@@ -305,7 +300,6 @@ var loadTasks = function() {
   }
 };
   
-
 // Events
 formEl.addEventListener("submit", taskFormHandler);  
 
